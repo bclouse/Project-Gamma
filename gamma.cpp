@@ -16,7 +16,18 @@
 using namespace std;
 
 int main() {
+	int n = 20;	//Cities
+	int sr = 1;
+
 	srand(time(NULL));
+	Agent Darwin (30,n,10);
+	Darwin.p_random();
+	Darwin.display();
+	for (int i = 0; i < 50; i++) {
+		Darwin.mutate();
+	}
+	cout << "\n\nNEW:\n";
+	Darwin.display();
 	
 	return 0;
 }
