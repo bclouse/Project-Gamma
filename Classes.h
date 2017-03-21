@@ -30,7 +30,7 @@ struct City {
 class Agent {
 private:
 	vector<vector<City>> policy;
-	vector<float> distances;
+	vector<float> fitness;
 	int start;
 	int policies;
 	int cities;
@@ -38,11 +38,11 @@ public:
 	Agent(float,int,int);
 	void p_random();
 	void display();
-	int action();
-	void evaluate();
+	float action();
+	float evaluate();
 	void down_select();
 	void repopulate();
-	void mutate();
+	void mutate(vector<City>*);
 };
 
 //===============================

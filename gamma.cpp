@@ -16,17 +16,20 @@
 using namespace std;
 
 int main() {
-	int n = 20;	//Cities
-	int sr = 1;
+	int size = 30;		//Range for x and y locations of cities
+	int n = 20;			//Cities
+	int pop = 10;		//Numer of policies in the population
+	int runs = 1000;		//Number of iterations that the evolutionary algorithm takes
+	int sr = 1;			//Statistical Runs
 
 	srand(time(NULL));
-	Agent Darwin (30,n,10);
+	Agent Darwin (size,n,pop);
 	Darwin.p_random();
 	Darwin.display();
-	for (int i = 0; i < 50; i++) {
-		Darwin.mutate();
+	for (int i = 0; i < runs; i++) {
+		Darwin.action();
 	}
-	cout << "\n\nNEW:\n";
+	cout << endl;
 	Darwin.display();
 	
 	return 0;
