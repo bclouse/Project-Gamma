@@ -38,11 +38,13 @@ public:
 	Agent(float,int,int);
 	void p_random();
 	void display();
-	float action();
-	float evaluate();
+	void action(float**,int);
+	void evaluate();
 	void down_select();
 	void repopulate();
 	void mutate(vector<City>*);
+	void log_data(float**,int);
+	void path();
 };
 
 //===============================

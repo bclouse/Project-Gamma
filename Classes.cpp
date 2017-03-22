@@ -10,6 +10,7 @@ Agent::Agent(float size, int c, int p) {
 	cities = c;
 	policies = p;
 	start = rand()%cities;
+	FILE *fp = fopen("Cities.txt","w+");
 
 	if (policies%2 == 1) {
 		policies++;
@@ -21,11 +22,13 @@ Agent::Agent(float size, int c, int p) {
 		list[i].x = (float) ZERO_TO_ONE*size;
 		list[i].y = (float) ZERO_TO_ONE*size;
 		list[i].num = i;
+		fprintf(fp, "%f\t%f\n", list[i].x, list[i].y);
 		init.push_back(list[i]);
 	}
 	for (int i = 0; i < policies; i++) {
 		policy.push_back(init);
 	}
+	fclose(fp);
 }
 
 void Agent::p_random() {
@@ -55,20 +58,18 @@ void Agent::display() {
 	}
 }
 
-float Agent::action() {
-	float best;
+void Agent::action(float** log, int n) {
 	// cout << "eval";
-	best = evaluate();
+	evaluate();
+	log_data(log,n);
 	// cout << ", down";
 	down_select();
 	// cout << ", and repop\n";
 	repopulate();		//mutation happens in here
-	return best;
 }
 
-float Agent::evaluate() {
-	int best = 0;
-	int fit = 0;
+void Agent::evaluate() {
+	float fit = 0;
 	fitness.clear();
 	//cout << endl;
 	for (int i = 0; i < policies; i++) {
@@ -78,9 +79,7 @@ float Agent::evaluate() {
 		}
 		fitness.push_back(fit);
 		// cout << i << ") " << fit << endl;
-		if (fitness[best] > fitness[i]) best = i;
 	}
-	return fitness[best];
 }
 
 void Agent::down_select() {
@@ -119,6 +118,36 @@ void Agent::mutate(vector<City> *pol) {
 	(*pol)[id2] = dummy;
 }
 
+void Agent::log_data(float** log, int n) {
+	int best = 0;
+	int worst = 0;
+	float avg = fitness[0];
+	for (int i = 1; i < fitness.size(); i++) {
+		if (fitness[i] < fitness[best]) best = i;
+		if (fitness[i] > fitness[worst]) worst = i;
+		avg += fitness[i];
+	}
+	log[n][0] += fitness[best];
+	log[n][1] += avg/fitness.size();
+	log[n][2] += fitness[worst];
+}
+
+void Agent::path() {
+	FILE *fp = fopen("Path.txt", "w+");
+	int best = 0;
+
+	evaluate();
+	for (int i = 1; i < fitness.size(); i++) {
+		if (fitness[i] < fitness[best]) best = i;
+	}
+
+	for (int i = 0; i < cities; i++) {
+		fprintf(fp, "%f\t%f\n", policy[best][i].x, policy[best][i].y);
+	}
+
+	fclose(fp);
+}
+
 //===============================
 //	Functions
 //===============================
@@ -126,3 +155,4 @@ void Agent::mutate(vector<City> *pol) {
 float distance(City loc1, City loc2) {
 	return sqrt(pow(loc1.x-loc2.x,2) + pow(loc1.y-loc2.y,2));
 }
+
