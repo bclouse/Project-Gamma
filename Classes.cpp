@@ -11,19 +11,19 @@ Agent::Agent(float size, int c, int p) {
 	policies = p;
 	start = rand()%cities;
 	FILE *fp = fopen("Cities.txt","w+");
+	double step = (double) 360/c*RADIANS;
 
 	if (policies%2 == 1) {
 		policies++;
 		cout << "\nNumber of policies wasn't even.\nThe number of policies was set to " << policies << endl;
 	}
 
-	City *list = new City[cities];
+	City list;
 	for (int i = 0; i < cities; i++) {
-		list[i].x = (float) ZERO_TO_ONE*size;
-		list[i].y = (float) ZERO_TO_ONE*size;
-		list[i].num = i;
-		fprintf(fp, "%f\t%f\n", list[i].x, list[i].y);
-		init.push_back(list[i]);
+		list.x = (float) (cos(step*i)+1)*size+5;
+		list.y = (float) (sin(step*i)+1)*size+5;
+		list.num = i;
+		init.push_back(list);
 	}
 	for (int i = 0; i < policies; i++) {
 		policy.push_back(init);

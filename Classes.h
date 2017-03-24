@@ -10,6 +10,7 @@
 using namespace std;
 
 #define ZERO_TO_ONE (float)rand()/RAND_MAX
+#define RADIANS (double)3.1415926535897/180
 
 #ifndef CLASSES_H
 #define CLASSES_H
