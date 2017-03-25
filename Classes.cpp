@@ -9,7 +9,7 @@ Agent::Agent(float size, int c, int p) {
 	City dummy;
 	cities = c;
 	policies = p;
-	start = rand()%cities;
+	start = 0;
 	FILE *fp = fopen("Cities.txt","w+");
 	double step = (double) 360/c*RADIANS;
 
@@ -83,19 +83,33 @@ void Agent::evaluate() {
 }
 
 void Agent::down_select() {
-	int worst;
-	do {
-		worst = 0;
-		for (int i = 1; i < fitness.size(); i++) {
-			if (fitness[worst] < fitness[i]) worst = i;
+	int n = fitness.size()/2;
+
+	for (int i = 0; i < n; i++) {
+		if (fitness[i] < fitness[i+1]) {
+			fitness.erase(fitness.begin()+i+1);
+			policy.erase(policy.begin()+i+1);
+		} else if (fitness[i] > fitness[i+1]) {
+			fitness.erase(fitness.begin()+i);
+			policy.erase(policy.begin()+i);
+		} else {
+			fitness.erase(fitness.begin()+i+(rand()%2));
+			policy.erase(policy.begin()+i+(rand()%2));
 		}
-		policy.erase(policy.begin()+worst);
-		fitness.erase(fitness.begin()+worst);
-	} while (fitness.size() > policies/2);
-	// cout << endl;
-	// display();
-	// cout << endl;
+	}
 }
+
+// void Agent::down_select() {
+// 	int worst;
+// 	do {
+// 		worst = 0;
+// 		for (int i = 1; i < fitness.size(); i++) {
+// 			if (fitness[worst] < fitness[i]) worst = i;
+// 		}
+// 		policy.erase(policy.begin()+worst);
+// 		fitness.erase(fitness.begin()+worst);
+// 	} while (fitness.size() > policies/2);
+// }
 
 void Agent::repopulate() {
 	int n = policy.size();

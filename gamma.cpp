@@ -17,10 +17,10 @@ using namespace std;
 
 int main() {
 	int size = 20;		//Range for x and y locations of cities
-	int n = 20;		//Cities
+	int n = 25;		//Cities
 	int pop = 100;		//Numer of policies in the population
 	int runs = 10000;	//Number of iterations that the evolutionary algorithm takes
-	int sr = 1;		//Statistical Runs
+	int sr = 30;		//Statistical Runs
 	float **fitness;
 	float dummy;
 	FILE *fp = fopen("Learning.txt","w+");
