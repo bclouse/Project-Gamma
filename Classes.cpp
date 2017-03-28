@@ -55,6 +55,7 @@ void Agent::display() {
 			printf("%3d  ", policy[j][i].num);
 		}
 		cout << endl;
+		// if (j == 4) cout << endl;
 	}
 }
 
@@ -83,32 +84,33 @@ void Agent::evaluate() {
 }
 
 void Agent::down_select() {
-	int n = fitness.size()/2;
+	int first, second;
 
-	for (int i = 0; i < n; i++) {
-		if (fitness[i] < fitness[i+1]) {
-			fitness.erase(fitness.begin()+i+1);
-			policy.erase(policy.begin()+i+1);
-		} else if (fitness[i] > fitness[i+1]) {
-			fitness.erase(fitness.begin()+i);
-			policy.erase(policy.begin()+i);
+	for (int i = 0; i < policies/2; i++) {
+		first = rand()%fitness.size();
+		do {
+			second = rand()%fitness.size();
+		} while (second == first);
+		if (fitness[first] <= fitness[second]) {
+			policy.erase(policy.begin()+second);
+			fitness.erase(fitness.begin()+second);
 		} else {
-			fitness.erase(fitness.begin()+i+(rand()%2));
-			policy.erase(policy.begin()+i+(rand()%2));
+			policy.erase(policy.begin()+first);
+			fitness.erase(fitness.begin()+first);
 		}
 	}
 }
 
 // void Agent::down_select() {
-// 	int worst;
-// 	do {
-// 		worst = 0;
-// 		for (int i = 1; i < fitness.size(); i++) {
-// 			if (fitness[worst] < fitness[i]) worst = i;
-// 		}
-// 		policy.erase(policy.begin()+worst);
-// 		fitness.erase(fitness.begin()+worst);
-// 	} while (fitness.size() > policies/2);
+// 	for (int i = 0; i < policies/2; i++) {
+// 		if (fitness[i] <= fitness[i+1]) {
+// 			policy.erase(policy.begin()+i+1);
+// 			fitness.erase(fitness.begin()+i+1);
+// 		} else {
+// 			policy.erase(policy.begin()+i);
+// 			fitness.erase(fitness.begin()+i);
+// 		} 
+// 	}
 // }
 
 void Agent::repopulate() {
@@ -118,6 +120,33 @@ void Agent::repopulate() {
 		mutate(&(policy[n+i]));
 	}
 }
+
+// void Agent::mutate(vector<City> *pol) {
+// 	int n;
+// 	double num = ZERO_TO_ONE;
+// 	int id1, id2;
+// 	City dummy;
+
+// 	if (num >= 0.75) {
+// 		n = 1;
+// 	} else if (num >= 0.05) {
+// 		n = 2;
+// 	} else if (num >= 0.01) {
+// 		n = 3;
+// 	} else {
+// 		n = 4;
+// 	}
+
+// 	for (int i = 0; i < n; i++) {
+// 		id1 = 1+rand()%(cities-1);
+// 		do {
+// 			id2 = 1+rand()%(cities-1);
+// 		} while (id1 == id2);
+// 		dummy = (*pol)[id1];
+// 		(*pol)[id1] = (*pol)[id2];
+// 		(*pol)[id2] = dummy;
+// 	}
+// }
 
 void Agent::mutate(vector<City> *pol) {
 	int id1, id2;
@@ -169,4 +198,6 @@ void Agent::path() {
 float distance(City loc1, City loc2) {
 	return sqrt(pow(loc1.x-loc2.x,2) + pow(loc1.y-loc2.y,2));
 }
+
+
 
