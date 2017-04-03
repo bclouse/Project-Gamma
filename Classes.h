@@ -36,7 +36,7 @@ private:
 	int policies;
 	int cities;
 public:
-	Agent(float,int,int);
+	Agent(float,int,int,bool);
 	void p_random();
 	void display();
 	void action(float**,int);
